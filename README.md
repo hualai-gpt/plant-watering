@@ -24,8 +24,7 @@
 
 3.  **Agentcore 处理**:
     -   Lambda 函数调用 **Bedrock AgentCore** 运行时。
-    -   Agent (逻辑位于 `agent/src/app.py` 和 `agent/src/agent.py`) 对输入视频进行分析，识别植物状态并生成浇水建议。
-    -   视频处理流程：下载视频 -> 上传至 Google Gemini File API -> 传递给 Gemini 模型分析 -> 删除临时文件。
+    -   Agent (逻辑位于 `agent/src/app.py` 和 `agent/src/agent.py`) 对输入视频进行分析，判断植物是否需要浇水。
 
 4.  **发送 SQS 结果**:
     -   Lambda 函数获取 Agent 的处理结果。
@@ -34,21 +33,7 @@
         {
           "uuid": "xxx1",
           "plant_name": "绿萝 (Epipremnum aureum)",
-          "plant_water_type": "中等水分植物",
-          "soil_moisture_pref": "保持湿润但不要积水",
-          "watering_schedule": [
-            {
-              "time": "08:00",
-              "frequency_days": 3,
-              "amount_ml": 200
-            }
-          ],
-          "watering_schedule_cron": [
-            {
-              "cron": "0 8 */3 * *",
-              "amount_ml": 200
-            }
-          ]
+          "is_watering": "1" // "1" 表示需要浇水，"0" 表示不需要
         }
         ```
     -   最后，Lambda 将结果发送到输出 SQS 队列 (`watering-result`)，供后续系统使用。

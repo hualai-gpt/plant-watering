@@ -1,7 +1,6 @@
 import json
 import boto3
 import uuid
-from util import time_to_cron
 
 SESSION_ID = str(uuid.uuid4()) + str(uuid.uuid4())
 
@@ -43,20 +42,7 @@ def lambda_handler(event, context):
     if msg_uuid:
         response_json['uuid'] = msg_uuid
     
-    # Process watering schedule to cron
-    response_json['watering_schedule_cron'] = []
-    if 'watering_schedule' in response_json:
-        for schedule in response_json['watering_schedule']:
-            time_str = schedule.get('time')
-            frequency = schedule.get('frequency_days', 1)
-            try:
-                cron_expr = time_to_cron(time_str, frequency)
-                response_json['watering_schedule_cron'].append({
-                    "cron": cron_expr,
-                    "amount_ml": schedule.get('amount_ml')
-                })
-            except ValueError as e:
-                print(f"Error converting schedule to cron: {e}")
+    # No more cron processing needed for the simplified output
 
     # json 格式化输出
     print("response_data: ", json.dumps(response_json, indent=2, ensure_ascii=False))
