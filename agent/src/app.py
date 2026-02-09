@@ -2,14 +2,8 @@ import os
 import requests
 import tempfile
 import time
-import google.generativeai as genai
 from agent import create_agent
 from bedrock_agentcore.runtime import BedrockAgentCoreApp
-
-# Configure GenAI directly for file upload since video usually requires File API
-api_key = os.getenv("GOOGLE_API_KEY")
-if api_key:
-    genai.configure(api_key=api_key)
 
 agent = create_agent()
 app = BedrockAgentCoreApp()
@@ -20,7 +14,6 @@ def agent_invocation(payload):
     print("payload:\n*******\n", payload)
     
     video_url = payload.get("video_url", "")
-    user_message = payload.get("user_message", "")
     
     # Input Sanitization
     if isinstance(video_url, str):
@@ -32,14 +25,10 @@ def agent_invocation(payload):
 
     content = []
     
-    if user_message:
-        content.append(user_message)
-    
-    if not video_url and not user_message:
-        return {"error": "please provide video_url or user_message"}
+    if not video_url:
+        return {"error": "please provide video_url"}
     
     tmp_path = None
-    video_file = None
     
     try:
         if video_url:
@@ -58,38 +47,30 @@ def agent_invocation(payload):
             
             print(f"Video downloaded to {tmp_path}")
 
-            # Upload to Gemini File API
-            video_file = genai.upload_file(path=tmp_path)
-            print(f"Video uploaded to Gemini: {video_file.uri}")
-            
-            # Wait for processing
-            while video_file.state.name == "PROCESSING":
-                print("Waiting for video processing...")
-                time.sleep(2)
-                video_file = genai.get_file(video_file.name)
-            
-            if video_file.state.name == "FAILED":
-                raise ValueError("Video processing failed in Gemini")
+            # Read video bytes
+            with open(tmp_path, "rb") as f:
+                video_bytes = f.read()
 
-            # Append video file to content
-            content.append(video_file)
+            # Construct content for Strands Agent (using bytes, NOT Gemini file upload)
+            content.append({
+                "video": {
+                    "format": "mp4",
+                    "source": {
+                        "bytes": video_bytes
+                    }
+                }
+            })
 
         # Invoke agent
+        # Note: Strands Agent usually takes a list of content blocks directly for the user message
         result = agent(content)
         print("result:\n*******\n", result)
         
-        # Clean up remote file after use
-        if video_file:
-            try:
-                genai.delete_file(video_file.name)
-                print(f"Deleted remote file {video_file.name}")
-            except Exception as e:
-                print(f"Failed to delete remote file {video_file.name}: {e}")
-                
         return result
 
     except Exception as e:
         print(f"Processing failed: {e}")
+        # Return error structure that matches expected output or at least doesn't crash the lambda handler
         return {"error": f"Failed to process request: {str(e)}"}
         
     finally:
