@@ -8,13 +8,12 @@
 
 1.  **发送 SQS 消息**:
     -   向输入 SQS 队列 (`plant-watering`) 发送消息。
-    -   消息内容通常包含用户的问题 (`user_message`) 和植物照片的链接 (`image_url`)。
+    -   消息内容包含任务 UUID (`uuid`) 和植物视频链接 (`video_url`)。
     -   发送的 SQS 消息示例：
         ```json
         {
           "uuid": "xxx1",
-          "user_message": "这是什么植物？需要怎么浇水？",
-          "image_url": "https://s3.xxx.xxx.jpeg"
+          "video_url": "https://s3.xxx.xxx.mp4"
         }
         ```
     -   示例脚本：`lambda/test_sqs.py`。
@@ -25,7 +24,8 @@
 
 3.  **Agentcore 处理**:
     -   Lambda 函数调用 **Bedrock AgentCore** 运行时。
-    -   Agent (逻辑位于 `agent/src/app.py` 和 `agent/src/agent.py`) 对输入进行分析，识别植物状态并生成浇水建议。
+    -   Agent (逻辑位于 `agent/src/app.py` 和 `agent/src/agent.py`) 对输入视频进行分析，识别植物状态并生成浇水建议。
+    -   视频处理流程：下载视频 -> 上传至 Google Gemini File API -> 传递给 Gemini 模型分析 -> 删除临时文件。
 
 4.  **发送 SQS 结果**:
     -   Lambda 函数获取 Agent 的处理结果。

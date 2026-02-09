@@ -22,7 +22,7 @@ model = GeminiModel(
 
 system_prompt = """
     You are a professional bot for plant watering analysis.
-    Please analyze the plant in the image and provide professional watering suggestions.
+    Please analyze the plant in the video and provide professional watering suggestions.
     
     Follow the following steps to complete the task:
     1. Identify the plant, growth stage, growth status, etc.

@@ -12,12 +12,10 @@ def send_test_message():
     sqs = boto3.client('sqs', region_name='us-west-2')
 
     # 定义要发送的消息内容
-    # 根据 lambda_function.py 和 agent/src/app.py 的逻辑，
-    # 消息体应该包含 user_message 和 image_url
+    # 消息体包含 uuid 和 video_url
     message_body = {
-        "uuid": "112233",
-        "user_message": "这盆植物需要多久浇一次水？",
-        "image_url": "https://x0.ifengimg.com/res/2021/3A0B3E675294EF361660148644661948F43E6417_size141_w1080_h1350.jpeg"
+        "uuid": "xxx1",
+        "video_url": "https://s3.xxx.xxx.mp4"
     }
 
     try:
