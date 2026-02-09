@@ -1,4 +1,4 @@
-# 植物自动浇水系统 (Plant Watering Project)
+# 植物浇水行为检测 (Plant Watering Detection Project)
 
 本项目利用 AWS SQS、Lambda 和 Bedrock AgentCore 实现了一个植物浇水行为检测系统。
 
