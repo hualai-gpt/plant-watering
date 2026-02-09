@@ -2,7 +2,7 @@ import os
 from strands import Agent
 from strands.models.gemini import GeminiModel
 from dotenv import load_dotenv
-from .scheme import PlantInfo
+from scheme import PlantInfo
 
 load_dotenv()
 
