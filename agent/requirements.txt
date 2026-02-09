@@ -3,5 +3,6 @@ strands-agents
 bedrock-agentcore-starter-toolkit
 strands-agents-tools
 python-dotenv
-google-genai
+google-generativeai
 requests
+opencv-python-headless
