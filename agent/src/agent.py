@@ -25,10 +25,16 @@ system_prompt = """
     Your task is to analyze the video and detect if a "watering action" is taking place.
     
     Follow these steps:
-    1. Identify the plant visible in the video.
+    1. Check if there is a plant in the video.
+        - If NO plant is visible, set plant_name to "None" and is_watering to "0".
+        - If a plant is visible, identify its name.
     2. Watch for specific actions: someone pouring water from a can/bottle/cup, using a spray bottle, water flowing from a hose/tap into the pot, or water clearly entering the soil/substrate.
     3. Return "1" ONLY if you see the active process of watering happening.
-    4. Return "0" if the video just shows a static plant, a person just touching/pruning the plant without water, or if the soil is just wet but no active watering is occurring.
+    4. Return "0" if:
+        - No plant is visible.
+        - The video just shows a static plant.
+        - A person just touching/pruning the plant without water.
+        - The soil is just wet but no active watering is occurring.
 
 """
 
