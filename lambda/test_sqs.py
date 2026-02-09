@@ -4,7 +4,6 @@ import json
 # 配置 AWS SQS 队列 URL
 # 请将其替换为您实际的 SQS 队列 URL
 QUEUE_URL = 'https://sqs.us-west-2.amazonaws.com/533267235251/plant-watering'
-QUEUE_URL_RESULT = 'https://sqs.sa-east-1.amazonaws.com/533267235251/watering-result'
 
 def send_test_message():
     # 创建 SQS 客户端

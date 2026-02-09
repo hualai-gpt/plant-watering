@@ -10,7 +10,7 @@ payload = json.dumps(
 )
 response = client.invoke_agent_runtime(
     agentRuntimeArn='arn:aws:bedrock-agentcore:us-west-2:533267235251:runtime/plant_watering-0u0rMsAxuN',
-    runtimeSessionId='e37d91c1-8d94-4099-9542-fe249bc7e642', # Must be 33+ char. Every new SessionId will create a new MicroVM
+    runtimeSessionId='e37d91c1-8d94-4099-9542-fe249bc7e641', # Must be 33+ char. Every new SessionId will create a new MicroVM
     payload=payload,
 )
 response_body = response['response'].read()

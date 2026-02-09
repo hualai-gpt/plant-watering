@@ -5,7 +5,7 @@ import uuid
 SESSION_ID = str(uuid.uuid4()) + str(uuid.uuid4())
 
 # Placeholder ARN - needs to be updated with the actual watering agent ARN
-AGENT_RUNTIME_ARN = 'arn:aws:bedrock-agentcore:us-west-2:533267235251:runtime/watering_agent-PLACEHOLDER'
+AGENT_RUNTIME_ARN = 'arn:aws:bedrock-agentcore:us-west-2:533267235251:runtime/plant_watering-0u0rMsAxuN'
 SQS_QUEUE_URL = 'https://sqs.sa-east-1.amazonaws.com/533267235251/watering-result'
 
 def lambda_handler(event, context):
